@@ -14,7 +14,7 @@ One [daily Parquet file](https://huggingface.co/datasets/pjay-in/indian-railways
 
 ## GUI and NoSQL database
 
-The dashboard at `/` reads PostgreSQL. The Service Notes GUI at `/notes` reads and writes MongoDB documents. [Implementation details](docs/GUI_and_NoSQL_Implementation.md) describe the collection, API, validation, and local-only write boundary.
+The dashboard at `/` reads PostgreSQL. The Service Notes GUI at `/notes` reads and writes MongoDB documents. [Implementation details](docs/GUI_and_NoSQL_Implementation.md) describe the collection, API, validation, and local-only write boundary. Screenshots: [historical dashboard](docs/screenshots/dashboard-historical.png) and [Service Notes](docs/screenshots/service-notes.png).
 
 ## Local setup
 
