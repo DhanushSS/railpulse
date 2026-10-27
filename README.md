@@ -1,31 +1,35 @@
 # RailPulse
 
-An early working setup for an Indian railway delay and reliability DBMS project. The PostgreSQL schema includes nine tables, pgvector, reliability views, delay and alert triggers, and a stored report function. The Next.js dashboard shows train reliability, station delays, and alerts from **illustrative sample data**. It does not show live railway status.
+A working setup for an Indian railway delay and reliability DBMS project. PostgreSQL and pgvector store train runs, compute delay and alerts, and provide reliability views. The Next.js dashboard shows either an illustrative demo or a small **sourced historical sample**. It does not show live train status.
+
+## Historical sample used here
+
+One [daily Parquet file](https://huggingface.co/datasets/pjay-in/indian-railways-delays/tree/main/data/2026/10) was downloaded from [pjay-in/indian-railways-delays](https://huggingface.co/datasets/pjay-in/indian-railways-delays) (CC BY 4.0), rather than the entire dataset. It holds runs completed on 25 October 2026. A selected subset of six train services has 12 completed runs and 258 stop observations. See [data/SOURCE.md](data/SOURCE.md) for selection and limitations. The local app is configured to show this historical sample.
 
 ## Local setup
 
-Requires PostgreSQL with the `vector` extension, Node.js 22 or later, and npm. On macOS with Homebrew, install PostgreSQL and pgvector, then start PostgreSQL. The schema has been checked here with PostgreSQL 18.6 and pgvector 0.8.7.
+Requires PostgreSQL with the `vector` extension, Node.js 22 or later, and npm. The schema was checked here with PostgreSQL 18.6 and pgvector 0.8.7. Create a separate database for the historical sample:
 
 ```sh
-createdb railpulse
-psql -d railpulse -v ON_ERROR_STOP=1 -f sql/railpulse_schema.sql
-psql -d railpulse -v ON_ERROR_STOP=1 -f sql/seed_demo.sql
+createdb railpulse_observed
+psql -d railpulse_observed -v ON_ERROR_STOP=1 -f sql/railpulse_schema.sql
 cp .env.example .env.local
+# Edit .env.local: DATABASE_URL=postgres:///railpulse_observed and DATA_MODE=historical
 npm install
+npm run import:observed
 npm run check:db
-psql -d railpulse -v ON_ERROR_STOP=1 -f sql/check_behavior.sql
 npm run dev
 ```
 
-Open http://localhost:3000. Set `DATABASE_URL` in `.env.local` for your PostgreSQL host and credentials. Never commit that file. Do not rerun `seed_demo.sql` on a populated database; it uses fixed sample keys.
+Open http://localhost:3000. The import requires an empty RailPulse schema, so it does not mix historical rows with the illustrative demo. To reproduce the selection from the Parquet file, install `requirements-data.txt` in a Python environment and run `python scripts/select_data.py`.
 
-Read-only API routes: `/api/trains`, `/api/stations`, `/api/alerts`.
+The optional illustrative demo instead uses `railpulse` as its database and `sql/seed_demo.sql`. Read-only API routes: `/api/trains`, `/api/stations`, `/api/alerts`.
 
 ## Project status
 
 The schema is corrected from the earlier SQL attached to the audit. `docs/audit_report_source.md` preserves that report, but its Appendix B and C contain unresolved `{{INCLUDE:...}}` placeholders; the executable SQL in `sql/` is the source to use here. `docs/relational_schema.md` records the conceptual model; refer to the SQL for exact constraints.
 
-This is a setup and dashboard starter, not a complete course submission. Authentication, role enforcement, complaint submission, text embeddings, realistic data sourcing, admin screens, and application tests remain to be built. The demo train, stations, dates, and delays are invented for testing and must not be presented as real railway records.
+This is a project starter, not a complete course submission. Authentication, role enforcement, complaint submission, text embeddings, station metadata, route distances, admin screens, and application tests remain to be built. Historical observations can include estimated times; see the source's `arrival_reported`, `departure_reported`, and `run_quality` fields.
 
 ## Database rules
 
@@ -34,3 +38,4 @@ This is a setup and dashboard starter, not a complete course submission. Authent
 - Route and event stop keys are composite.
 - The complaint embedding dimension is 384, indexed with HNSW and cosine distance.
 - The report function accepts internal `train_id`, not public `train_number`.
+- Keep database credentials in `.env.local`, never in Git.

@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "check:db": "node --env-file=.env.local scripts/check-db.mjs"
+    "check:db": "node --env-file=.env.local scripts/check-db.mjs",
+    "import:observed": "node --env-file=.env.local scripts/import-observed.mjs"
   },
   "dependencies": {
     "next": "16.4.3",

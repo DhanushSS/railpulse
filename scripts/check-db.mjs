@@ -15,5 +15,10 @@ try {
     const row = values.rows[0];
     if (Number(row.stops_recorded) !== 6 || Number(row.avg_delay_minutes) !== 21.67 || Number(row.on_time_pct) !== 33.33) throw new Error(`Unexpected demo summary: ${JSON.stringify(row)}`);
   }
-  console.log('Database check passed:', {tables, views, triggers, demoRows: values.rowCount});
+  if (process.env.DATA_MODE === 'historical') {
+    const counts = await db.query('SELECT (SELECT count(*) FROM train)::int trains, (SELECT count(*) FROM journey)::int journeys, (SELECT count(*) FROM stop_event)::int stops');
+    const row = counts.rows[0];
+    if (row.trains !== 6 || row.journeys !== 12 || row.stops !== 258) throw new Error(`Unexpected historical sample: ${JSON.stringify(row)}`);
+  }
+  console.log('Database check passed:', {tables, views, triggers, mode:process.env.DATA_MODE});
 } finally { await db.end(); }
