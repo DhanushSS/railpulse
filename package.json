@@ -9,7 +9,9 @@
     "check:db": "node --env-file=.env.local scripts/check-db.mjs",
     "import:observed": "node --env-file=.env.local scripts/import-observed.mjs",
     "setup:mongo": "node --env-file=.env.local scripts/setup-mongo.mjs",
-    "mongo:start": "sh scripts/start-mongo.sh"
+    "mongo:start": "sh scripts/start-mongo.sh",
+    "setup:auth": "node --env-file=.env.local scripts/setup-auth.mjs",
+    "check:app": "node --env-file=.env.local scripts/check-app.mjs"
   },
   "dependencies": {
     "mongodb": "^7.7.0",

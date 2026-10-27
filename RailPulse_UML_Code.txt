@@ -88,3 +88,23 @@ classDiagram
     Complaint "0..*" --> "1" Train : about
     Complaint "0..*" --> "0..1" Journey : related_to
     Journey "1" --> "0..*" Alert : raises
+
+-- Authentication extension (PlantUML)
+@startuml RailPulse_Authentication
+entity USER_ACCOUNT {
+  * user_id : integer <<PK>>
+  --
+  email : varchar <<UK>>
+  password_hash : varchar
+  role : varchar
+}
+entity AUTH_SESSION {
+  * session_id : bigint <<PK>>
+  --
+  token_hash : char(64) <<UK>>
+  user_id : integer <<FK>>
+  created_at : timestamptz
+  expires_at : timestamptz
+}
+USER_ACCOUNT ||--o{ AUTH_SESSION : authenticates
+@enduml

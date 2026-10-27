@@ -30,6 +30,7 @@ npm run import:observed
 npm run check:db
 npm run mongo:start
 npm run setup:mongo
+npm run setup:auth
 npm run dev
 ```
 
@@ -41,7 +42,7 @@ The optional illustrative demo instead uses `railpulse` as its database and `sql
 
 The schema is corrected from the earlier SQL attached to the audit. `docs/audit_report_source.md` preserves that report, but its Appendix B and C contain unresolved `{{INCLUDE:...}}` placeholders; the executable SQL in `sql/` is the source to use here. `docs/relational_schema.md` records the conceptual model; refer to the SQL for exact constraints.
 
-This is a project starter, not a complete course submission. Authentication, role enforcement, complaint submission, text embeddings, station metadata, route distances, admin screens, and application tests remain to be built. Historical observations can include estimated times; see the source's `arrival_reported`, `departure_reported`, and `run_quality` fields.
+The project includes database-backed authentication, an analyst dashboard, database browsing, and integration tests. Complaint submission, text embeddings, enriched station metadata, route distances, and differentiated administrative permissions remain outside the implemented workflow. Historical observations can include estimated times; see the source's `arrival_reported`, `departure_reported`, and `run_quality` fields.
 
 ## Database rules
 
@@ -51,3 +52,40 @@ This is a project starter, not a complete course submission. Authentication, rol
 - The complaint embedding dimension is 384, indexed with HNSW and cosine distance.
 - The report function accepts internal `train_id`, not public `train_number`.
 - Keep database credentials in `.env.local`, never in Git.
+
+## Railway intelligence UI (October 2026)
+
+RailPulse now has a railway-themed sign-in page and an authenticated analyst workspace.
+Run `npm run setup:auth` once after creating/importing the SQL database, then `npm run build`
+and `npm run start -- -p 3100`. Open http://localhost:3100/login and choose **Create an account**.
+There is no default password. Accounts are stored in `user_account`; salted scrypt hashes
+protect passwords. Eight-hour sessions are stored in `auth_session`, with token hashes in
+PostgreSQL and raw tokens only in HttpOnly, SameSite cookies. Sign-out revokes the session.
+
+The workspace includes:
+
+- **Overview:** stop-weighted metrics, delay bars, punctuality distribution and service summary.
+- **Train explorer:** name/number/route search, date filters, sorting, journey timelines and CSV export.
+- **Station insights:** all station codes, sorting, pagination and observed visits.
+- **Delay alerts:** searchable historical alerts with severity filters and CSV export.
+- **Service notes:** MongoDB create, edit, filter, trash and restore. SQL validates train/station references.
+- **Database explorer:** all 10 SQL tables (9 core plus sessions), 2 views and the MongoDB collection;
+  paged records, column types, keys, constraints and read-only query previews. Empty tables remain visible.
+  Credential values are masked on the server. Timestamp values are shown as stored.
+- **Dataset & sources:** sample provenance, limits and metric definitions.
+
+Every data API requires sign-in. This remains a local project workspace bound to 127.0.0.1;
+self-registration creates analyst accounts with shared access to the project data and notes.
+It does not implement multi-tenant isolation, email verification or password recovery.
+Do not expose it publicly without adding those deployment and access controls.
+
+### Verification
+
+With PostgreSQL, MongoDB and the app running, use `npm run check:app` for HTTP/database integration
+checks. It creates a uniquely named temporary account and note, checks auth guards, database
+browsing, masking, pagination, note CRUD/trash/restore and session revocation, then removes its
+fixtures. `npm run check:db` verifies the original project objects and historical sample counts.
+The browser workflow also covers login, filters, details, export, schemas and note editing.
+
+Authentication DDL: `sql/auth.sql`. Existing nine-table ER/relational documents describe the
+core railway model; `docs/authentication-and-ui.md` documents the additional session relationship.

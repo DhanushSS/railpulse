@@ -9,17 +9,19 @@ export type ServiceNote = {
   source: 'illustrative_seed' | 'user_entry';
   details?: Record<string, string | number | boolean>;
   created_at: Date;
+  updated_at?: Date;
+  deleted_at?: Date;
 };
 
 const uri = process.env.MONGODB_URI;
 const database = process.env.MONGODB_DB;
 if (!uri || !database) throw new Error('MONGODB_URI and MONGODB_DB are required. See .env.example.');
 
-const cache = globalThis as unknown as { railpulseMongo?: Promise<MongoClient> };
-const clientPromise = cache.railpulseMongo ?? new MongoClient(uri, { serverSelectionTimeoutMS: 3000 }).connect();
-if (process.env.NODE_ENV !== 'production') cache.railpulseMongo = clientPromise;
+const cache = globalThis as unknown as { railpulseMongoClient?: MongoClient };
+const client = cache.railpulseMongoClient ?? new MongoClient(uri, { serverSelectionTimeoutMS: 3000 });
+cache.railpulseMongoClient = client;
 
 export async function notesCollection(): Promise<Collection<ServiceNote & Document>> {
-  const client = await clientPromise;
+  await client.connect();
   return client.db(database).collection<ServiceNote & Document>('service_notes');
 }
