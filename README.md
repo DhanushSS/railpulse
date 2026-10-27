@@ -12,6 +12,10 @@ A working setup for an Indian railway delay and reliability DBMS project. Postgr
 
 One [daily Parquet file](https://huggingface.co/datasets/pjay-in/indian-railways-delays/tree/main/data/2026/10) was downloaded from [pjay-in/indian-railways-delays](https://huggingface.co/datasets/pjay-in/indian-railways-delays) (CC BY 4.0), rather than the entire dataset. It holds runs completed on 25 October 2026. A selected subset of six train services has 12 completed runs and 258 stop observations. See [data/SOURCE.md](data/SOURCE.md) for selection and limitations. The local app is configured to show this historical sample.
 
+## GUI and NoSQL database
+
+The dashboard at `/` reads PostgreSQL. The Service Notes GUI at `/notes` reads and writes MongoDB documents. [Implementation details](docs/GUI_and_NoSQL_Implementation.md) describe the collection, API, validation, and local-only write boundary.
+
 ## Local setup
 
 Requires PostgreSQL with the `vector` extension, Node.js 22 or later, and npm. The schema was checked here with PostgreSQL 18.6 and pgvector 0.8.7. Create a separate database for the historical sample:
@@ -24,6 +28,8 @@ cp .env.example .env.local
 npm install
 npm run import:observed
 npm run check:db
+npm run mongo:start
+npm run setup:mongo
 npm run dev
 ```
 
