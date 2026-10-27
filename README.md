@@ -2,6 +2,12 @@
 
 A working setup for an Indian railway delay and reliability DBMS project. PostgreSQL and pgvector store train runs, compute delay and alerts, and provide reliability views. The Next.js dashboard shows either an illustrative demo or a small **sourced historical sample**. It does not show live train status.
 
+## Database design deliverables
+
+- [ER diagram (PNG)](docs/RailPulse_ER_Diagram.png), [editable SVG](docs/RailPulse_ER_Diagram.svg), and [Mermaid source](docs/RailPulse_ER_Diagram.mmd)
+- [Relational schema](docs/relational_schema.md)
+- [Executable PostgreSQL DDL](sql/railpulse_schema.sql)
+
 ## Historical sample used here
 
 One [daily Parquet file](https://huggingface.co/datasets/pjay-in/indian-railways-delays/tree/main/data/2026/10) was downloaded from [pjay-in/indian-railways-delays](https://huggingface.co/datasets/pjay-in/indian-railways-delays) (CC BY 4.0), rather than the entire dataset. It holds runs completed on 25 October 2026. A selected subset of six train services has 12 completed runs and 258 stop observations. See [data/SOURCE.md](data/SOURCE.md) for selection and limitations. The local app is configured to show this historical sample.

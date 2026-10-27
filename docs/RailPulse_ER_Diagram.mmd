@@ -1,0 +1,92 @@
+%% RailPulse logical ER diagram, matching sql/railpulse_schema.sql
+%% ROUTE_STOP and STOP_EVENT are weak entities with composite primary keys.
+%% Cardinalities reflect database constraints: a parent can have zero child rows.
+erDiagram
+    direction LR
+    ZONE ||--o{ STATION : has
+    STATION ||--o{ TRAIN : originates
+    STATION ||--o{ TRAIN : terminates
+    TRAIN ||--o{ ROUTE_STOP : identifies
+    STATION ||--o{ ROUTE_STOP : scheduled_at
+    TRAIN ||--o{ JOURNEY : runs
+    JOURNEY ||--o{ STOP_EVENT : identifies
+    STATION ||--o{ STOP_EVENT : recorded_at
+    USER_ACCOUNT ||--o{ COMPLAINT : files
+    TRAIN ||--o{ COMPLAINT : concerns
+    JOURNEY |o--o{ COMPLAINT : optionally_links
+    JOURNEY ||--o{ ALERT : raises
+
+    ZONE {
+        int zone_id PK
+        varchar zone_code UK
+        varchar zone_name
+        varchar headquarters
+    }
+    STATION {
+        int station_id PK
+        varchar station_code UK
+        varchar station_name
+        varchar city
+        varchar state
+        int zone_id FK
+    }
+    TRAIN {
+        int train_id PK
+        varchar train_number UK
+        varchar train_name
+        varchar train_type
+        int source_station_id FK
+        int destination_station_id FK
+    }
+    ROUTE_STOP {
+        int train_id PK, FK
+        int seq_no PK
+        int station_id FK
+        time scheduled_arrival
+        time scheduled_departure
+        numeric distance_km
+        int halt_minutes
+    }
+    JOURNEY {
+        int journey_id PK
+        int train_id FK
+        date journey_date
+        varchar run_status
+    }
+    STOP_EVENT {
+        int journey_id PK, FK
+        int seq_no PK
+        int station_id FK
+        timestamp scheduled_arrival
+        timestamp actual_arrival
+        timestamp scheduled_departure
+        timestamp actual_departure
+        int delay_minutes
+        varchar platform_no
+    }
+    USER_ACCOUNT {
+        int user_id PK
+        varchar full_name
+        varchar email UK
+        varchar password_hash
+        varchar role
+    }
+    COMPLAINT {
+        int complaint_id PK
+        int user_id FK
+        int train_id FK
+        int journey_id FK
+        text complaint_text
+        varchar category
+        numeric sentiment_score
+        vector384 embedding
+        timestamp created_at
+    }
+    ALERT {
+        int alert_id PK
+        int journey_id FK
+        varchar alert_type
+        varchar message
+        int threshold_minutes
+        timestamp created_at
+    }
