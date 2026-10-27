@@ -1,0 +1,90 @@
+classDiagram
+    direction LR
+
+    class Zone {
+        +int zone_id PK
+        +string zone_code UNIQUE
+        +string zone_name
+        +string headquarters
+    }
+    class Station {
+        +int station_id PK
+        +string station_code UNIQUE
+        +string station_name
+        +string city
+        +string state
+        +int zone_id FK
+    }
+    class Train {
+        +int train_id PK
+        +string train_number UNIQUE
+        +string train_name
+        +string train_type
+        +int source_station_id FK
+        +int destination_station_id FK
+    }
+    class RouteStop {
+        +int train_id PK_FK
+        +int seq_no PK
+        +int station_id FK
+        +time scheduled_arrival
+        +time scheduled_departure
+        +decimal distance_km
+        +int halt_minutes
+    }
+    class Journey {
+        +int journey_id PK
+        +int train_id FK
+        +date journey_date
+        +string run_status
+    }
+    class StopEvent {
+        +int journey_id PK_FK
+        +int seq_no PK
+        +int station_id FK
+        +timestamp scheduled_arrival
+        +timestamp actual_arrival
+        +timestamp scheduled_departure
+        +timestamp actual_departure
+        +int delay_minutes DERIVED
+        +string platform_no
+    }
+    class UserAccount {
+        +int user_id PK
+        +string full_name
+        +string email UNIQUE
+        +string password_hash
+        +string role
+    }
+    class Complaint {
+        +int complaint_id PK
+        +int user_id FK
+        +int train_id FK
+        +int journey_id FK_NULLABLE
+        +text complaint_text
+        +string category
+        +decimal sentiment_score
+        +vector384 embedding
+        +timestamp created_at
+    }
+    class Alert {
+        +int alert_id PK
+        +int journey_id FK
+        +string alert_type
+        +string message
+        +int threshold_minutes
+        +timestamp created_at
+    }
+
+    Zone "1" --> "0..*" Station : has
+    Train "0..*" --> "1" Station : originates_at
+    Train "0..*" --> "1" Station : terminates_at
+    Train "1" *-- "0..*" RouteStop : has_stop
+    RouteStop "0..*" --> "1" Station : scheduled_at
+    Train "1" --> "0..*" Journey : runs
+    Journey "1" *-- "0..*" StopEvent : has_event
+    StopEvent "0..*" --> "1" Station : recorded_at
+    UserAccount "1" --> "0..*" Complaint : files
+    Complaint "0..*" --> "1" Train : about
+    Complaint "0..*" --> "0..1" Journey : related_to
+    Journey "1" --> "0..*" Alert : raises
