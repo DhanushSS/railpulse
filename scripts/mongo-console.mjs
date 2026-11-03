@@ -1,0 +1,12 @@
+import {MongoClient} from 'mongodb';
+import repl from 'node:repl';
+const client=new MongoClient(process.env.MONGODB_URI||'mongodb://127.0.0.1:27017');await client.connect();
+const db=client.db(process.env.MONGODB_DB||'railpulse');
+console.log('\nRAILPULSE - MONGODB DATABASE CONSOLE\nConnected locally through the official MongoDB Node.js driver.\nThis is a JavaScript console (not mongosh); db is the connected database.\n');
+console.log("QUERY: await db.collection('service_notes').find({}).sort({created_at:-1}).limit(5).toArray()\n");
+console.dir(await db.collection('service_notes').find({}).sort({created_at:-1}).limit(5).toArray(),{depth:4,colors:true});
+console.log('\nQUERY: active notes grouped by category ($match / $group / $sort)\n');
+const pipeline=[{$match:{deleted_at:{$exists:false}}},{$group:{_id:'$category',notes:{$sum:1},trains:{$addToSet:'$train_number'}}},{$sort:{notes:-1,_id:1}}];
+console.dir(pipeline,{depth:5,colors:true});console.table(await db.collection('service_notes').aggregate(pipeline).toArray());
+console.log("\nTry: await db.collection('service_notes').indexes()\nCompass mongosh examples: demos/mongodb-demo.js (use db.collection here instead of db.getCollection)\nUse .exit to close the connection.\n");
+const session=repl.start({prompt:'RailPulse MongoDB > '});session.context.db=db;session.context.pipeline=pipeline;session.on('exit',()=>void client.close());

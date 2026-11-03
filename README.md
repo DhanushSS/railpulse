@@ -95,3 +95,9 @@ core railway model; `docs/authentication-and-ui.md` documents the additional ses
 See [requirements and demo checklist](docs/course-requirements.md) and the [consolidated project report](docs/project-report.md). Apply `sql/feedback-validation.sql` to existing databases. Railway feedback now performs SQL INSERT/SELECT/UPDATE/DELETE in transactions. Analysts manage their own feedback; administrators review all feedback and execute Admin reports (HAVING/subquery, stored function, MongoDB aggregation). Database Explorer scopes feedback/accounts/sessions to their owner unless ADMIN.
 
 For local administrator provisioning, set `ADMIN_EMAIL` in the ignored environment file before that email registers, or run `npm run account:role -- registered@email ADMIN` for an existing account. Registration cannot choose its role. This local setup does not verify email ownership. Run `npm run check:course` for the additional 29 checks, and `psql -d railpulse_observed -v ON_ERROR_STOP=1 -f sql/course_demo.sql` for reversible DDL/DML/savepoint evidence.
+
+## Level 3 submission and database demos
+
+Read the [complete Level 3 change log](docs/LEVEL_3_CHANGES.md) for the before/after implementation and team responsibilities. Download the [detailed two-person explanation PDF](docs/submission/RailPulse_Detailed_Level_3_Two_Person_Guide.pdf). Each person has five dedicated pages and both cover database plus application work.
+
+Open `demos/postgresql-demo.sql` in pgAdmin Query Tool. Use MongoDB Compass with the local `railpulse.service_notes` collection, or run `npm run mongo:console` for a JavaScript console using the official driver. Matching read-only examples are in `demos/mongodb-demo.js`.
