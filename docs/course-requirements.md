@@ -65,3 +65,5 @@ The course SQL demo rolls back every write and drops its temporary table. The te
 5. Both show successful checks, Git history and their actual individual contributions.
 
 Do not claim live tracking, real passenger incidents from illustrative notes, automatic embeddings, production security or national reliability conclusions from this subset.
+
+Query previews are collapsed by default in Admin reports and Database Explorer. Use Show query during the demonstration to explain the SQL or MongoDB pipeline.
