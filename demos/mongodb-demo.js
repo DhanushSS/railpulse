@@ -18,3 +18,23 @@ await db.getCollection('service_notes').aggregate([
 // 4. Compound indexes and collection validation
 await db.getCollection('service_notes').indexes()
 db.getCollectionInfos({name:'service_notes'})
+
+// 5. Review cases: full-text index search
+await db.incident_reviews.find({$text:{$search:'historical'}}).limit(6).toArray()
+
+// 6. Faceted summaries and embedded timeline lengths
+await db.incident_reviews.aggregate([
+ {$facet:{
+   statuses:[{$group:{_id:'$status',cases:{$sum:1}}}],
+   trains:[{$group:{_id:'$train_number',cases:{$sum:1},updates:{$sum:{$size:'$updates'}}}}],
+   total:[{$count:'cases'}]
+ }}
+]).toArray()
+
+// 7. Embedded history analysis (empty until someone adds updates)
+await db.incident_reviews.aggregate([
+ {$unwind:'$updates'},
+ {$group:{_id:'$updates.author',updates:{$sum:1}}},
+ {$sort:{updates:-1}}
+]).toArray()
+await db.incident_reviews.getIndexes()

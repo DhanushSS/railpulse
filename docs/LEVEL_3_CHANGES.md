@@ -71,3 +71,7 @@ PostgreSQL was opened in pgAdmin on railpulse_observed and the CTE/window-functi
 
 ![PostgreSQL query and results](images/pgadmin-demo.png)
 ![MongoDB aggregation and results](images/mongodb-compass-demo.png)
+
+## Further MongoDB expansion
+
+A second collection, incident_reviews, now implements investigation cases, nested historical evidence, embedded timeline updates, full-text search, compound indexes, schema validation and facet-based summaries. ADMIN controls status transitions; analysts add case updates. Nineteen new checks bring the total to 112. See [MongoDB expansion](MONGODB_EXPANSION.md) for the current scope; earlier PDF guides predate this addition.

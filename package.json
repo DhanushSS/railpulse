@@ -14,7 +14,9 @@
     "check:app": "node --env-file=.env.local scripts/check-app.mjs",
     "account:role": "node --env-file=.env.local scripts/set-role.mjs",
     "check:course": "node --env-file=.env.local scripts/check-course.mjs",
-    "mongo:console": "node --env-file=.env.local scripts/mongo-console.mjs"
+    "mongo:console": "node --env-file=.env.local scripts/mongo-console.mjs",
+    "setup:incidents": "node --env-file=.env.local scripts/setup-incidents.mjs",
+    "check:incidents": "node --env-file=.env.local scripts/check-incidents.mjs"
   },
   "dependencies": {
     "mongodb": "^7.7.0",

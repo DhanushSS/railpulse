@@ -101,3 +101,7 @@ For local administrator provisioning, set `ADMIN_EMAIL` in the ignored environme
 Read the [complete Level 3 change log](docs/LEVEL_3_CHANGES.md) for the before/after implementation and team responsibilities. Download the [detailed two-person explanation PDF](docs/submission/RailPulse_Detailed_Level_3_Two_Person_Guide.pdf). Each person has five dedicated pages and both cover database plus application work.
 
 Open `demos/postgresql-demo.sql` in pgAdmin Query Tool. Use MongoDB Compass with the local `railpulse.service_notes` collection, or run `npm run mongo:console` for a JavaScript console using the official driver. Matching read-only examples are in `demos/mongodb-demo.js`.
+
+## Expanded MongoDB investigations
+
+MongoDB now contains **service_notes and incident_reviews**. Run `npm run setup:incidents` after configuring the databases. The new Investigations page provides full-text search, status filters, case creation, embedded update timelines, Admin status transitions and facet-based summaries. Six clearly labeled historical review tasks are derived from SQL observations. Read [MongoDB expansion](docs/MONGODB_EXPANSION.md) for the data model, indexes, validation, queries and demonstration. `npm run check:incidents` adds 19 checks (112 total with existing checks). Older PDF guides describe the earlier baseline; use the expansion document as a supplement.

@@ -25,3 +25,9 @@ export async function notesCollection(): Promise<Collection<ServiceNote & Docume
   await client.connect();
   return client.db(database).collection<ServiceNote & Document>('service_notes');
 }
+
+export type IncidentReview = {train_number:string;title:string;description:string;priority:string;status:string;source:string;created_by:number;created_at:Date;updated_at:Date;updates:{text:string;author:string;user_id:number;at:Date;status?:string}[]};
+export async function incidentCollection() {
+  await client.connect();
+  return client.db(database).collection<IncidentReview>('incident_reviews');
+}
