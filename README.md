@@ -42,7 +42,7 @@ The optional illustrative demo instead uses `railpulse` as its database and `sql
 
 The schema is corrected from the earlier SQL attached to the audit. `docs/audit_report_source.md` preserves that report, but its Appendix B and C contain unresolved `{{INCLUDE:...}}` placeholders; the executable SQL in `sql/` is the source to use here. `docs/relational_schema.md` records the conceptual model; refer to the SQL for exact constraints.
 
-The project includes database-backed authentication, an analyst dashboard, database browsing, and integration tests. Complaint submission, text embeddings, enriched station metadata, route distances, and differentiated administrative permissions remain outside the implemented workflow. Historical observations can include estimated times; see the source's `arrival_reported`, `departure_reported`, and `run_quality` fields.
+The project includes database-backed authentication, an analyst dashboard, database browsing, and integration tests. SQL feedback CRUD and ADMIN/ANALYST permissions are implemented. Text embeddings, enriched station metadata and route distances remain future work. Historical observations can include estimated times; see the source's `arrival_reported`, `departure_reported`, and `run_quality` fields.
 
 ## Database rules
 
@@ -89,3 +89,9 @@ The browser workflow also covers login, filters, details, export, schemas and no
 
 Authentication DDL: `sql/auth.sql`. Existing nine-table ER/relational documents describe the
 core railway model; `docs/authentication-and-ui.md` documents the additional session relationship.
+
+## Course completion update
+
+See [requirements and demo checklist](docs/course-requirements.md) and the [consolidated project report](docs/project-report.md). Apply `sql/feedback-validation.sql` to existing databases. Railway feedback now performs SQL INSERT/SELECT/UPDATE/DELETE in transactions. Analysts manage their own feedback; administrators review all feedback and execute Admin reports (HAVING/subquery, stored function, MongoDB aggregation). Database Explorer scopes feedback/accounts/sessions to their owner unless ADMIN.
+
+For local administrator provisioning, set `ADMIN_EMAIL` in the ignored environment file before that email registers, or run `npm run account:role -- registered@email ADMIN` for an existing account. Registration cannot choose its role. This local setup does not verify email ownership. Run `npm run check:course` for the additional 29 checks, and `psql -d railpulse_observed -v ON_ERROR_STOP=1 -f sql/course_demo.sql` for reversible DDL/DML/savepoint evidence.

@@ -15,7 +15,7 @@ export async function POST(request:Request){
   let id:number;
   if(body.action==='register'){
    const hash=await hashPassword(password);
-   const r=await pool.query("INSERT INTO user_account(full_name,email,password_hash,role) VALUES($1,$2,$3,'ANALYST') ON CONFLICT(email) DO NOTHING RETURNING user_id",[name,email,hash]);
+   const r=await pool.query("INSERT INTO user_account(full_name,email,password_hash,role) VALUES($1,$2,$3,$4) ON CONFLICT(email) DO NOTHING RETURNING user_id",[name,email,hash,email===process.env.ADMIN_EMAIL?.trim().toLowerCase()?'ADMIN':'ANALYST']);
    if(!r.rowCount)return Response.json({error:'An account already exists for this email. Sign in instead.'},{status:409});id=r.rows[0].user_id;
   }else{
    const r=await pool.query('SELECT user_id,password_hash FROM user_account WHERE email=$1',[email]);

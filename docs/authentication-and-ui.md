@@ -52,8 +52,8 @@ Source timestamps have no timezone conversion. Analytical views are derived, so 
 are separate from the physical SQL record total. Retained soft-deleted notes are visible in the
 raw document view with `deleted_at` metadata.
 
-All authenticated local analysts share the workspace. This project does not claim enterprise
-role isolation, email delivery, live railway tracking, or a complete production identity service.
+Analysts share service notes, but SQL feedback is owner-scoped. ADMIN can review all feedback and
+open advanced reports. The app does not claim email delivery, live tracking or production identity.
 
 ## Verified screens
 

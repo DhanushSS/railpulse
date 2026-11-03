@@ -35,5 +35,5 @@ The MongoDB start script binds to `127.0.0.1` and stores database files in `.loc
 
 - `GET /api/notes?train=22160&category=DELAY_REVIEW` returns up to 50 recent documents.
 - `POST /api/notes` accepts a train number, category, 10–1000 character note, optional station code, and up to five short tags. It accepts browser requests only from a matching localhost origin.
-- No login or role enforcement is implemented. This is a **local demonstration**; do not expose the write API as a public service until authentication and authorization are added.
+- All note APIs require login. Service notes are shared workspace observations; SQL feedback is owner-scoped with ADMIN review. Writes require a matching localhost origin.
 - Seed notes are illustrative analysis examples, not verified incident reports. The historical railway observations remain in PostgreSQL and are labeled as historical, not live.

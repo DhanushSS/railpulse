@@ -11,7 +11,9 @@
     "setup:mongo": "node --env-file=.env.local scripts/setup-mongo.mjs",
     "mongo:start": "sh scripts/start-mongo.sh",
     "setup:auth": "node --env-file=.env.local scripts/setup-auth.mjs",
-    "check:app": "node --env-file=.env.local scripts/check-app.mjs"
+    "check:app": "node --env-file=.env.local scripts/check-app.mjs",
+    "account:role": "node --env-file=.env.local scripts/set-role.mjs",
+    "check:course": "node --env-file=.env.local scripts/check-course.mjs"
   },
   "dependencies": {
     "mongodb": "^7.7.0",

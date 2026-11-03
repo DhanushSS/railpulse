@@ -50,4 +50,4 @@ ALERT(alert_id PK, journey_id FK → JOURNEY.journey_id,
 
 ## Data currently loaded locally
 
-The separate `railpulse_observed` database contains a historical sample of six trains, 12 runs, and 258 stop events. Its [source file](../data/SOURCE.md) has station codes but no station names, zones, or distances. Therefore its `ROUTE_STOP`, `USER_ACCOUNT`, and `COMPLAINT` tables are empty; placeholder location fields are marked `Unknown`. This does not change the schema above.
+The separate `railpulse_observed` database contains a historical sample of six trains, 12 runs, and 258 stop events. Its [source file](../data/SOURCE.md) has station codes but no station names, zones, or distances. The historical import leaves `ROUTE_STOP` empty; `USER_ACCOUNT` and `COMPLAINT` receive records only from account registration and user feedback. placeholder location fields are marked `Unknown`. This does not change the schema above.

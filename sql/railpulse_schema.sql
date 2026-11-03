@@ -82,7 +82,7 @@ CREATE TABLE user_account (
     user_id        SERIAL PRIMARY KEY,
     full_name      VARCHAR(100) NOT NULL,
     email          VARCHAR(120) NOT NULL UNIQUE,
-    password_hash  VARCHAR(255) NOT NULL,       -- bcrypt/argon2 hash, never plaintext
+    password_hash  VARCHAR(255) NOT NULL,       -- application uses salted scrypt, never plaintext
     role           VARCHAR(20)  NOT NULL DEFAULT 'COMMUTER'
                    CHECK (role IN ('ADMIN','ANALYST','COMMUTER'))
 );
