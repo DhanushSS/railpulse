@@ -75,3 +75,13 @@ PostgreSQL was opened in pgAdmin on railpulse_observed and the CTE/window-functi
 ## Further MongoDB expansion
 
 A second collection, incident_reviews, now implements investigation cases, nested historical evidence, embedded timeline updates, full-text search, compound indexes, schema validation and facet-based summaries. ADMIN controls status transitions; analysts add case updates. Nineteen new checks bring the total to 112. See [MongoDB expansion](MONGODB_EXPANSION.md) for the current scope; earlier PDF guides predate this addition.
+
+## Night Railway interface — 4 November 2026
+
+The interface now uses a navy railway control-center theme with mint signal accents, original vector train artwork, a redesigned sign-in page, and a network overview hero. Shared styling covers charts, tables, SQL schema inspection, MongoDB notes and investigations, feedback forms, reports, and dialogs. Historical data labels and role restrictions remain in place.
+
+Validation: production build and TypeScript passed; 64 application checks, 29 course checks, and 19 investigation checks passed during this redesign. Browser checks covered sign-in, dashboard, SQL columns and relationships, mobile navigation, and narrow-screen overflow (document width equals viewport width). Temporary QA account removed after verification.
+
+![Night Railway dashboard](images/night-dashboard.png)
+![Database explorer](images/night-database.png)
+![Sign in](images/night-login.png)
