@@ -13,4 +13,4 @@ else
   exit 1
 fi
 mkdir -p .local/mongodb
-"$MONGOD_BIN" --dbpath "$(pwd)/.local/mongodb" --bind_ip 127.0.0.1 --port 27017 --fork --logpath "$(pwd)/.local/mongodb.log"
+"$MONGOD_BIN" --nounixsocket --dbpath "$(pwd)/.local/mongodb" --bind_ip 127.0.0.1 --port 27017 --fork --logpath "$(pwd)/.local/mongodb.log"

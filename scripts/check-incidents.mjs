@@ -12,6 +12,7 @@ try{
  expect(await call('/api/incidents',a.cookie,'PATCH',{id,update:'Analyst has added evidence to the timeline.'}),200);
  expect(await call('/api/incidents',a.cookie,'PATCH',{id,update:'Analyst tries changing status for verification.',status:'RESOLVED'}),403);
  expect(await call('/api/incidents',b.cookie,'PATCH',{id,update:'Administrator completed this temporary review.',status:'RESOLVED'}),200);
+ expect(await call('/api/incidents',a.cookie,'PATCH',{id,update:'This late update must be rejected.'}),409);
  const r=expect(await call('/api/incidents?q=uniquereviewtoken&status=RESOLVED',a.cookie),200);assert.equal(r.body.records.length,1);assert.equal(r.body.records[0].updates.length,2);assert.equal(r.body.statusSummary[0].count,1);assert.equal(r.body.trainSummary[0].updates,2);checks+=4;
  const catalog=expect(await call('/api/database',a.cookie),200);assert.equal(catalog.body.mongo.collections.length,2);checks++;
  const rows=expect(await call('/api/database?table=incident_reviews',a.cookie),200);assert.ok(rows.body.columns.includes('updates'));checks++;

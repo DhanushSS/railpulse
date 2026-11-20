@@ -18,7 +18,10 @@ async function write(request:Request,edit:boolean){try{
  const b=await request.json();if(!b||typeof b!=='object'||Array.isArray(b))return Response.json({error:'Invalid request.'},{status:400});const c=await incidentCollection();
  if(edit){if(typeof b.id!=='string'||!/^[a-f0-9]{24}$/i.test(b.id)||typeof b.update!=='string'||b.update.trim().length<10||b.update.length>1000)return Response.json({error:'Provide an update of 10-1,000 characters.'},{status:400});
  if(b.status&&(!['OPEN','INVESTIGATING','RESOLVED'].includes(b.status)||user.role!=='ADMIN'))return Response.json({error:'Only an administrator can change case status.'},{status:403});
- const r=await c.updateOne({_id:new ObjectId(b.id),'updates.99':{$exists:false}},{$set:{updated_at:new Date(),...(b.status?{status:b.status}:{})},$push:{updates:{text:b.update.trim(),author:user.full_name,user_id:user.user_id,at:new Date(),...(b.status?{status:b.status}:{})}}});
+ const r=await c.updateOne({_id:new ObjectId(b.id),'updates.99':{$exists:false},...(user.role==='ADMIN'?{}:{status:{$ne:'RESOLVED'}})},{$set:{updated_at:new Date(),...(b.status?{status:b.status}:{})},$push:{updates:{text:b.update.trim(),author:user.full_name,user_id:user.user_id,at:new Date(),...(b.status?{status:b.status}:{})}}});
+ if(!r.matchedCount && user.role!=='ADMIN' && await c.findOne({_id:new ObjectId(b.id),status:'RESOLVED'},{projection:{_id:1}})){
+   return Response.json({error:'This investigation is resolved. Analyst updates are closed.'},{status:409});
+ }
  return r.matchedCount?Response.json({ok:true}):Response.json({error:'Case missing or its 100-update limit was reached.'},{status:404});}
  if(typeof b.train_number!=='string'||typeof b.title!=='string'||b.title.trim().length<5||b.title.length>120||!['LOW','MEDIUM','HIGH'].includes(b.priority)||typeof b.description!=='string'||b.description.trim().length<10||b.description.length>2000)return Response.json({error:'Check train, title, priority and description.'},{status:400});
  if(!(await pool.query('SELECT 1 FROM train WHERE train_number=$1',[b.train_number])).rowCount)return Response.json({error:'Train is not in the project.'},{status:400});
